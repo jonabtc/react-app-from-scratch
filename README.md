@@ -1,5 +1,3 @@
-I use this project as the basis for creating a React project without using `create-react-app`:
-
 ## Setup
 
 First, initialize the project in new directory:
@@ -164,3 +162,55 @@ webpack serve --mode development
 ```
 
 You should add this in script section inside the `package.json` file.
+
+## Jest
+
+To install Jest, run the following command:
+
+```sh
+npm install  --save-dev jest babel-jest
+```
+
+Next, let's configure Jest to handle asset files such as stylesheets and images.
+
+For mocking CSS Modules, need to install another dev package:
+
+```
+npm install --save-dev identity-obj-proxy
+```
+
+We'll create a new file called `jest.config.js` on root directory, and paste:
+
+```js
+module.exports = {
+  moduleNameMapper: {
+    '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
+      '<rootDir>/__mocks__/fileMock.js',
+    '\\.(css|less)$': 'identity-obj-proxy',
+  },
+};
+```
+
+Now we'll create a directory called `__mocks__` in root directory. Inside that create a `fileMock.js` file with:
+
+```js
+module.exports = 'test-file-stub';
+```
+
+In script section inside of `package.json` file, we'll replace `"test"`:
+
+```json
+"scripts":{
+  ...
+  "test": "jest --watch"
+  ...
+}
+```
+
+And now we'll create a test `App.test.js` file in `src` directory whith following content:
+
+```js
+test('render without error', () => {});
+```
+
+and execute `npm run test`
